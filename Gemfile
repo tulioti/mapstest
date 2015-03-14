@@ -44,3 +44,9 @@ group :development, :test do
 end
 
 gem 'gmaps4rails'
+
+group :development do
+  gem "awesome_print", require:"ap"
+  gem 'quiet_assets'
+end
+
