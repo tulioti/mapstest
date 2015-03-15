@@ -8,6 +8,7 @@
 
 <h2>Footer</h2>
 <% @lat = -19.916681 %>
+<% @lat2 = -19.7 %>
 <% @log = -43.934493 %>
 
 <script source="javascript">
@@ -17,11 +18,11 @@
     {
       "lat": <%= @lat %>,
       "lng": <%= @log %>,
-      "picture": {
-        "url": "https://addons.cdn.mozilla.net/img/uploads/addon_icons/13/13028-64.png",
-        "width":  36,
-        "height": 36
-      },
+      "infowindow": "hello!"
+    },
+    {
+      "lat": <%= @lat2 %>,
+      "lng": <%= @log %>,
       "infowindow": "hello!"
     }
   ]);
