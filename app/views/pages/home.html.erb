@@ -14,6 +14,55 @@
 
 <script source="javascript">
 
+var list = [
+{ origin: new google.maps.LatLng(41.13021, 16.83124), destination: new google.maps.LatLng(41.12813, 16.83778), color: 1},
+{ origin: new google.maps.LatLng(41.12813, 16.83778), destination: new google.maps.LatLng(41.13021, 16.83124), color: 2}
+];
+var vStrokeColor;
+var vzIndex;
+var map;
+var directionsService = new google.maps.DirectionsService();
+
+function calcRoute(entry) {
+  var request = {
+      origin: entry.origin,
+      destination: entry.destination,
+      travelMode: google.maps.TravelMode["DRIVING"]
+  };
+
+  if (entry.color == 1){
+    vStrokeColor = "#FF0000"
+    vzIndex = 100
+
+  }else if (entry.color == 2){
+    vStrokeColor = "#0DFF00"
+    vzIndex = 1
+  }
+
+  var directionsDisplay = new google.maps.DirectionsRenderer({polylineOptions:{suppressPolylines:true, geodesic:true,  strokeColor:vStrokeColor, strokeWeight: 4, strokeOpacity: 1, zIndex: vzIndex}});
+  directionsDisplay.setMap(map);
+
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    }
+  });
+}
+function initialize() {
+    var myLatlng = new google.maps.LatLng(41.08801, 16.83689);
+    var mapOptions = {
+        zoom: 15,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+      }
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    calcRoute(list[0]);
+    calcRoute(list[1]);
+
+}
+google.maps.event.addDomListener(window,'load',initialize);
+
+/*
   handler = Gmaps.build('Google');
   handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
   handler.fitMapToBounds();
@@ -23,17 +72,17 @@
     var end_point   = [ <%= @lat2 %>, <%= @log %>];
 
 
-  function drawRoutes(start_point, end_point){
 
-    var directionsService = new google.maps.DirectionsService();
+var directionsService = new google.maps.DirectionsService();
+
+
+  function drawRoutes(start_point, end_point, in_power){
+
+    var color = routeColor(in_power);
+
+
     //var directionsDisplay = new google.maps.DirectionsRenderer();
-    var directionsDisplay = new google.maps.DirectionsRenderer({
-    polylineOptions: {
-       strokeColor: "red"
-    }
-    });
 
-    directionsDisplay.setMap(handler.getMap());
     start = new google.maps.LatLng(start_point[0], start_point[1]);
     end = new google.maps.LatLng(end_point[0], end_point[1]);
     var request = {
@@ -42,18 +91,41 @@
       travelMode:  google.maps.TravelMode.DRIVING
     };
 
+    var directionsDisplay = new google.maps.DirectionsRenderer({
+    polylineOptions: {
+       strokeColor: color
+    }
+    });
+
+    directionsDisplay.setMap(handler.getMap());
+    directionsDisplay.setOptions( { suppressMarkers: true } );
+
     directionsService.route(request, function(response, status) {
       if (status === google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
       }
     });
   }
-  drawRoutes(start_point, end_point);
+  drawRoutes(start_point, end_point, 120);
 
   start_point = [ <%= @lat2 %>, <%= @log %>];
   end_point   = [ <%= @lat3 %>, <%= @log %>];
-  drawRoutes(start_point, end_point);
+  drawRoutes(start_point, end_point, 10);
 
+
+  function routeColor(in_power){
+    if (in_power == 0 && in_power < 50){
+      return "red";
+    }
+
+    else if (in_power >= 50 && in_power < 100){
+      return "green";
+    }
+    else { //in_power >= 100
+      return "blue";
+    }
+  }
+  */
 /*
 
     var handler = Gmaps.build('Google');
